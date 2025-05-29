@@ -1,0 +1,20 @@
+# Cargar dataset (Ejemplo: MNIST)
+mnist = tf.keras.datasets.mnist
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+# Normalizar y adaptar dimensiones
+x_train = x_train / 255.0
+x_test = x_test / 255.0
+
+# MNIST es escala de grises, adaptar a 3 canales para modelo (o cambia input_shape)
+x_train = np.expand_dims(x_train, axis=-1)
+x_train = np.repeat(x_train, 3, axis=-1)  # repetir canal 3 veces
+x_test = np.expand_dims(x_test, axis=-1)
+x_test = np.repeat(x_test, 3, axis=-1)
+
+# Ajustar tamaño a 64x64 (redimensionar)
+x_train = tf.image.resize(x_train, [64,64])
+x_test = tf.image.resize(x_test, [64,64])
+
+# Entrenar modelo
+model.fit(x_train, y_train, epochs=5, batch_size=64, validation_data=(x_test, y_test))
